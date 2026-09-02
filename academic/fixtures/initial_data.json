@@ -1,0 +1,100 @@
+[
+    {
+        "model": "academic.teacher",
+        "pk": 1,
+        "fields": { "first_name": "Marcelo", "last_name": "Alvarado" }
+    },
+    {
+        "model": "academic.teacher",
+        "pk": 2,
+        "fields": { "first_name": "Carolina", "last_name": "Fuentes" }
+    },
+    {
+        "model": "academic.teacher",
+        "pk": 3,
+        "fields": { "first_name": "Rodrigo", "last_name": "Sepúlveda" }
+    },
+
+    {
+        "model": "academic.course",
+        "pk": 1,
+        "fields": { "name": "Desarrollo Backend", "teacher": 1 }
+    },
+    {
+        "model": "academic.course",
+        "pk": 2,
+        "fields": { "name": "Base de Datos", "teacher": 2 }
+    },
+    {
+        "model": "academic.course",
+        "pk": 3,
+        "fields": { "name": "Programación Web", "teacher": 1 }
+    },
+    {
+        "model": "academic.course",
+        "pk": 4,
+        "fields": { "name": "Redes y Ciberseguridad", "teacher": 3 }
+    },
+
+    {
+        "model": "academic.student",
+        "pk": 1,
+        "fields": { "first_name": "Marcelo", "last_name": "Alvarado" }
+    },
+    {
+        "model": "academic.student",
+        "pk": 2,
+        "fields": { "first_name": "Javiera", "last_name": "Muñoz" }
+    },
+    {
+        "model": "academic.student",
+        "pk": 3,
+        "fields": { "first_name": "Diego", "last_name": "Rojas" }
+    },
+    {
+        "model": "academic.student",
+        "pk": 4,
+        "fields": { "first_name": "Fernanda", "last_name": "Torres" }
+    },
+    {
+        "model": "academic.student",
+        "pk": 5,
+        "fields": { "first_name": "Ignacio", "last_name": "Vergara" }
+    },
+
+    {
+        "model": "academic.studentcourse",
+        "pk": 1,
+        "fields": { "student": 1, "course": 1 }
+    },
+    {
+        "model": "academic.studentcourse",
+        "pk": 2,
+        "fields": { "student": 1, "course": 3 }
+    },
+    {
+        "model": "academic.studentcourse",
+        "pk": 3,
+        "fields": { "student": 2, "course": 1 }
+    },
+    {
+        "model": "academic.studentcourse",
+        "pk": 4,
+        "fields": { "student": 3, "course": 2 }
+    },
+    {
+        "model": "academic.studentcourse",
+        "pk": 5,
+        "fields": { "student": 4, "course": 4 }
+    },
+    {
+        "model": "academic.studentcourse",
+        "pk": 6,
+        "fields": { "student": 5, "course": 1 }
+    },
+    {
+        "model": "academic.studentcourse",
+        "pk": 7,
+        "fields": { "student": 5, "course": 4 }
+    }
+]

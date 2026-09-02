@@ -1,0 +1,39 @@
+EVALUACIÓN N°1 - DESARROLLO BACKEND CON DJANGO & DRF
+Entregable de Inteligencia Artificial (prompts.txt)
+Herramienta utilizada: Claude (Anthropic)
+Alumno: Benjamin Gomez
+=====================================================================
+
+PROMPT 1
+---------
+"Necesito que me ayudes a construir paso a paso un proyecto Django
+llamado academic_project con una app llamada academic, siguiendo el
+esquema ER de la evaluación (Teacher, Course, Student, StudentCourse),
+con serializers DRF, endpoints API, plantillas HTML con Bootstrap y
+JavaScript fetch() para consumir la API de forma asíncrona."
+
+RESPUESTA DE LA IA (resumen):
+La IA me guio paso a paso: configuración del proyecto y registro de
+rest_framework y academic en INSTALLED_APPS, definición de los 4 modelos
+según el ER, creación de serializers.py con ModelSerializer para Teacher,
+Course y Student, views.py con ViewSets de DRF y vistas HTML, urls.py con
+DefaultRouter, un fixture JSON de datos ficticios para precargar la base
+de datos, y las plantillas base.html/courses.html/students.html con
+Bootstrap y los scripts courses.js/students.js usando fetch().
+
+---------------------------------------------------------------------
+
+PROMPT 2
+---------
+"Genera datos ficticios en formato JSON (docentes, cursos, estudiantes
+e inscripciones) coherentes entre sí para precargar el sistema."
+
+RESPUESTA DE LA IA (resumen):
+La IA generó un fixture de Django (academic/fixtures/initial_data.json)
+con 3 docentes, 4 cursos (cada uno con un teacher_id válido), 5
+estudiantes y 7 inscripciones en la tabla intermedia, respetando las
+relaciones del esquema ER.
+
+=====================================================================
+Nota: Las respuestas de la IA fueron revisadas, ejecutadas y ajustadas
+manualmente por el alumno durante el desarrollo del proyecto.

@@ -1,0 +1,35 @@
+{% extends 'academic/base.html' %}
+
+{% block title %}Cursos · Gestión Académica{% endblock %}
+
+{% block content %}
+<h2 class="mb-3">Listado de Cursos</h2>
+<p class="text-muted">Los datos se cargan de forma asíncrona desde <code>/api/courses/</code>.</p>
+
+<div id="courses-loading" class="text-center my-4">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+    </div>
+</div>
+
+<table class="table table-striped table-hover shadow-sm bg-white d-none" id="courses-table">
+    <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Curso</th>
+            <th>Profesor a cargo</th>
+        </tr>
+    </thead>
+    <tbody id="courses-tbody">
+        <!-- Filas generadas dinámicamente por courses.js -->
+    </tbody>
+</table>
+
+<div id="courses-error" class="alert alert-danger d-none" role="alert">
+    No se pudieron cargar los cursos desde la API.
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/academic/js/courses.js"></script>
+{% endblock %}
