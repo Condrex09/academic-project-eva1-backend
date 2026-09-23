@@ -3,33 +3,147 @@
 {% block title %}Estudiantes · Gestión Académica{% endblock %}
 
 {% block content %}
-<h2 class="mb-3">Listado de Estudiantes</h2>
-<p class="text-muted">Los datos se cargan de forma asíncrona desde <code>/api/students/</code>.</p>
-
-<div id="students-loading" class="text-center my-4">
-    <div class="spinner-border text-primary" role="status">
-        <span class="visually-hidden">Cargando...</span>
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+    <div>
+        <h2 class="h3 fw-bold text-dark mb-1">
+            <i class="bi bi-people-fill text-primary me-2"></i>Gestión de Estudiantes
+        </h2>
+        <p class="text-muted mb-0">
+            Administra los alumnos registrados en el sistema. Datos sincronizados en tiempo real mediante <code>/api/students/</code>.
+        </p>
+    </div>
+    <div class="d-flex align-items-center gap-2">
+        <span class="badge bg-secondary-subtle text-secondary border px-3 py-2 rounded-pill" id="students-counter">
+            <i class="bi bi-person me-1"></i> Cargando...
+        </span>
+        <button type="button" class="btn btn-gradient-primary d-flex align-items-center gap-2" id="btn-new-student">
+            <i class="bi bi-person-plus-fill"></i>
+            <span>Nuevo Estudiante</span>
+        </button>
     </div>
 </div>
 
-<table class="table table-striped table-hover shadow-sm bg-white d-none" id="students-table">
-    <thead class="table-dark">
-        <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Apellido</th>
-        </tr>
-    </thead>
-    <tbody id="students-tbody">
-        <!-- Filas generadas dinámicamente por students.js -->
-    </tbody>
-</table>
+<!-- Contenedor Principal de la Tabla -->
+<div class="custom-card p-0 overflow-hidden">
+    <!-- Spinner de Carga -->
+    <div id="students-loading" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Cargando...</span>
+        </div>
+        <p class="text-muted mt-2 mb-0">Consultando estudiantes a la API...</p>
+    </div>
 
-<div id="students-error" class="alert alert-danger d-none" role="alert">
-    No se pudieron cargar los estudiantes desde la API.
+    <!-- Alerta de Error -->
+    <div id="students-error" class="alert alert-danger m-3 d-none" role="alert">
+        <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-exclamation-octagon-fill fs-5"></i>
+            <div>
+                <strong>Error de conexión:</strong> No se pudieron cargar los estudiantes desde el endpoint de la API.
+            </div>
+        </div>
+    </div>
+
+    <!-- Estado Vacío -->
+    <div id="students-empty" class="text-center py-5 d-none">
+        <div class="mb-3 text-muted">
+            <i class="bi bi-person-x fs-1"></i>
+        </div>
+        <h5 class="fw-bold text-dark">No hay estudiantes registrados</h5>
+        <p class="text-muted mb-3">Comienza agregando un nuevo estudiante con el botón superior.</p>
+        <button class="btn btn-sm btn-outline-primary" id="btn-empty-new-student">
+            <i class="bi bi-plus-lg me-1"></i> Crear primer estudiante
+        </button>
+    </div>
+
+    <!-- Tabla de Estudiantes -->
+    <div class="table-responsive">
+        <table class="table table-custom d-none" id="students-table">
+            <thead>
+                <tr>
+                    <th style="width: 80px;" class="text-center">ID</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th style="width: 180px;" class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="students-tbody">
+                <!-- Filas generadas dinámicamente con JavaScript fetch() -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal: Crear / Editar Estudiante -->
+<div class="modal fade" id="studentModal" tabindex="-1" aria-labelledby="studentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form id="student-form" novalidate>
+                <div class="modal-header bg-light">
+                    <h5 class="modal-title fw-bold" id="studentModalLabel">
+                        <i class="bi bi-person-plus text-primary me-2"></i>Nuevo Estudiante
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <!-- ID oculto para distinguir Creación vs Edición -->
+                    <input type="hidden" id="student-id" value="">
+
+                    <div class="mb-3">
+                        <label for="student-first-name" class="form-label fw-semibold">Nombre <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="student-first-name" placeholder="Ej: Juan" required maxlength="100">
+                        <div class="invalid-feedback">Por favor ingresa el nombre del estudiante.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="student-last-name" class="form-label fw-semibold">Apellido <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="student-last-name" placeholder="Ej: Pérez" required maxlength="100">
+                        <div class="invalid-feedback">Por favor ingresa el apellido del estudiante.</div>
+                    </div>
+
+                    <div id="modal-error-alert" class="alert alert-danger py-2 d-none" role="alert">
+                        <small id="modal-error-message">Ocurrió un error al procesar la solicitud.</small>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-gradient-primary d-flex align-items-center gap-2" id="btn-save-student">
+                        <span class="spinner-border spinner-border-sm d-none" id="save-spinner" role="status" aria-hidden="true"></span>
+                        <span id="save-btn-text">Guardar Estudiante</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Confirmar Eliminación -->
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h6 class="modal-title fw-bold">
+                    <i class="bi bi-trash3-fill me-1"></i> Confirmar Eliminación
+                </h6>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body text-center p-4">
+                <i class="bi bi-exclamation-triangle text-danger display-4 mb-3 d-block"></i>
+                <p class="mb-1 text-dark fw-semibold">¿Eliminar a este estudiante?</p>
+                <p class="text-muted small mb-0" id="delete-student-name">Estudiante</p>
+                <input type="hidden" id="delete-student-id">
+            </div>
+            <div class="modal-footer justify-content-center bg-light">
+                <button type="button" class="btn btn-sm btn-outline-secondary px-3" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-sm btn-danger px-3 d-flex align-items-center gap-1" id="btn-confirm-delete">
+                    <span class="spinner-border spinner-border-sm d-none" id="delete-spinner" role="status" aria-hidden="true"></span>
+                    <span id="delete-btn-text">Sí, eliminar</span>
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
 
 {% block scripts %}
-<script src="/static/academic/js/students.js"></script>
+<script src="/static/academic/js/students.js?v=5.0"></script>
 {% endblock %}

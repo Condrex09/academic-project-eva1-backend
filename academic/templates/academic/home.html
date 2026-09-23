@@ -1,0 +1,168 @@
+{% extends 'academic/base.html' %}
+
+{% block title %}Inicio · Sistema de Gestión Académica{% endblock %}
+
+{% block content %}
+<div class="row g-4 mb-4">
+    <!-- Hero Banner de Bienvenida -->
+    <div class="col-12">
+        <div class="custom-card p-4 p-md-5 position-relative overflow-hidden" style="background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); color: #ffffff;">
+            <div class="position-absolute end-0 bottom-0 opacity-10 d-none d-md-block" style="transform: translate(15%, 20%); pointer-events: none;">
+                <i class="bi bi-mortarboard-fill" style="font-size: 20rem; color: white;"></i>
+            </div>
+            <div class="row align-items-center position-relative" style="z-index: 2;">
+                <div class="col-lg-8">
+                    <span class="badge rounded-pill bg-indigo-subtle text-white border border-light-subtle px-3 py-2 mb-3" style="background: rgba(99, 102, 241, 0.25);">
+                        <i class="bi bi-stars text-warning me-1"></i> Evaluación N°1 · Backend &amp; DRF
+                    </span>
+                    <h1 class="display-5 fw-bold mb-3">Sistema de Gestión Académica</h1>
+                    <p class="lead text-light opacity-75 mb-4" style="font-size: 1.15rem; max-width: 650px;">
+                        Bienvenido al portal institucional. Esta plataforma integra una arquitectura desacoplada:
+                        un backend robusto con <strong>Django REST Framework (DRF)</strong> y una interfaz web dinámica
+                        que realiza operaciones <strong>CRUD</strong> en tiempo real con <code>fetch()</code> sin recargar la página.
+                    </p>
+                    <div class="d-flex flex-wrap gap-3">
+                        <a href="{% url 'students' %}" class="btn btn-gradient-primary btn-lg shadow-sm">
+                            <i class="bi bi-people-fill me-2"></i> Estudiantes
+                        </a>
+                        <a href="{% url 'courses' %}" class="btn btn-outline-light btn-lg">
+                            <i class="bi bi-journal-bookmark-fill me-2"></i> Cursos
+                        </a>
+                        <a href="{% url 'teachers' %}" class="btn btn-outline-light btn-lg">
+                            <i class="bi bi-person-workspace me-2"></i> Profesores
+                        </a>
+                        <a href="/api/" target="_blank" class="btn btn-link text-light text-decoration-none d-flex align-items-center">
+                            <i class="bi bi-box-arrow-up-right me-1"></i> API REST
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tarjetas de Navegación Rápida -->
+    <div class="col-md-6 col-lg-3">
+        <div class="custom-card p-4 h-100 d-flex flex-column">
+            <div class="d-flex align-items-center gap-3 mb-3">
+                <div class="rounded-3 p-3 text-white" style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);">
+                    <i class="bi bi-people fs-3"></i>
+                </div>
+                <div>
+                    <h3 class="h5 fw-bold mb-0">Estudiantes</h3>
+                    <small class="text-muted">Módulo Alumnos</small>
+                </div>
+            </div>
+            <p class="text-secondary flex-grow-1 small">
+                Consulta el listado general de estudiantes, registra admisiones, modifica nombres y apellidos, o elimina registros con modales interactivos.
+            </p>
+            <hr class="my-3 text-muted opacity-25">
+            <div class="d-flex justify-content-between align-items-center">
+                <span class="badge bg-primary-subtle text-primary border border-primary-subtle">CRUD Completo</span>
+                <a href="{% url 'students' %}" class="btn btn-sm btn-primary">
+                    Acceder <i class="bi bi-arrow-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3">
+        <div class="custom-card p-4 h-100 d-flex flex-column">
+            <div class="d-flex align-items-center gap-3 mb-3">
+                <div class="rounded-3 p-3 text-white" style="background: linear-gradient(135deg, #10b981 0%, #047857 100%);">
+                    <i class="bi bi-journal-code fs-3"></i>
+                </div>
+                <div>
+                    <h3 class="h5 fw-bold mb-0">Cursos</h3>
+                    <small class="text-muted">Módulo Asignaturas</small>
+                </div>
+            </div>
+            <p class="text-secondary flex-grow-1 small">
+                Administra asignaturas académicas vinculadas a profesores titulares mediante <code>teacher_id</code>. Operaciones CRUD instantáneas vía REST.
+            </p>
+            <hr class="my-3 text-muted opacity-25">
+            <div class="d-flex justify-content-between align-items-center">
+                <span class="badge bg-success-subtle text-success border border-success-subtle">CRUD Completo</span>
+                <a href="{% url 'courses' %}" class="btn btn-sm btn-success">
+                    Acceder <i class="bi bi-arrow-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3">
+        <div class="custom-card p-4 h-100 d-flex flex-column">
+            <div class="d-flex align-items-center gap-3 mb-3">
+                <div class="rounded-3 p-3 text-white" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+                    <i class="bi bi-person-workspace fs-3"></i>
+                </div>
+                <div>
+                    <h3 class="h5 fw-bold mb-0">Profesores</h3>
+                    <small class="text-muted">Cuerpo Docente</small>
+                </div>
+            </div>
+            <p class="text-secondary flex-grow-1 small">
+                Módulo completo para registrar, modificar y dar de baja a docentes de la institución conectados a la base de datos y a la API.
+            </p>
+            <hr class="my-3 text-muted opacity-25">
+            <div class="d-flex justify-content-between align-items-center">
+                <span class="badge bg-warning-subtle text-dark border border-warning-subtle">CRUD Completo</span>
+                <a href="{% url 'teachers' %}" class="btn btn-sm btn-warning">
+                    Acceder <i class="bi bi-arrow-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3">
+        <div class="custom-card p-4 h-100 d-flex flex-column">
+            <div class="d-flex align-items-center gap-3 mb-3">
+                <div class="rounded-3 p-3 text-white" style="background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);">
+                    <i class="bi bi-hdd-network fs-3"></i>
+                </div>
+                <div>
+                    <h3 class="h5 fw-bold mb-0">API &amp; Fallback</h3>
+                    <small class="text-muted">DRF &amp; Rutas Seguras</small>
+                </div>
+            </div>
+            <p class="text-secondary flex-grow-1 small">
+                Endpoints RESTful estandarizados (GET, POST, PUT, PATCH, DELETE). Fallback automático ante rutas no encontradas eliminando 404.
+            </p>
+            <hr class="my-3 text-muted opacity-25">
+            <div class="d-flex justify-content-between align-items-center">
+                <span class="badge bg-dark-subtle text-dark border border-dark-subtle">Fallback Activo</span>
+                <a href="/api/" target="_blank" class="btn btn-sm btn-outline-dark">
+                    API Root <i class="bi bi-box-arrow-up-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Características Técnicas -->
+<div class="custom-card p-4">
+    <h4 class="fw-bold mb-3 d-flex align-items-center gap-2">
+        <i class="bi bi-check-circle-fill text-primary"></i>
+        <span>Especificaciones de la Solución</span>
+    </h4>
+    <div class="row g-3">
+        <div class="col-md-4">
+            <div class="p-3 bg-light rounded-3 border">
+                <div class="fw-semibold text-dark mb-1"><i class="bi bi-cpu text-primary me-1"></i> Backend RESTful con DRF</div>
+                <small class="text-muted">ModelViewSet y DefaultRouter para Teacher, Course, Student y StudentCourse con soporte total de métodos HTTP.</small>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="p-3 bg-light rounded-3 border">
+                <div class="fw-semibold text-dark mb-1"><i class="bi bi-window-fullscreen text-success me-1"></i> Modales y Toasts Bootstrap</div>
+                <small class="text-muted">Formularios reactivos con validaciones para crear y editar, modales de confirmación y notificaciones Toast.</small>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="p-3 bg-light rounded-3 border">
+                <div class="fw-semibold text-dark mb-1"><i class="bi bi-arrow-repeat text-indigo me-1"></i> Sincronización Real con BD</div>
+                <small class="text-muted">Peticiones asíncronas fetch() con protección CSRF. Las modificaciones se persisten directamente en <code>db.sqlite3</code>.</small>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

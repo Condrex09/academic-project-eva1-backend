@@ -1,0 +1,149 @@
+{% extends 'academic/base.html' %}
+
+{% block title %}Profesores · Gestión Académica{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+    <div>
+        <h2 class="h3 fw-bold text-dark mb-1">
+            <i class="bi bi-person-workspace text-indigo me-2" style="color: #6366f1;"></i>Gestión de Profesores
+        </h2>
+        <p class="text-muted mb-0">
+            Administra el cuerpo docente de la institución. Datos sincronizados en tiempo real mediante <code>/api/teachers/</code>.
+        </p>
+    </div>
+    <div class="d-flex align-items-center gap-2">
+        <span class="badge bg-secondary-subtle text-secondary border px-3 py-2 rounded-pill" id="teachers-counter">
+            <i class="bi bi-person me-1"></i> Cargando...
+        </span>
+        <button type="button" class="btn btn-gradient-primary d-flex align-items-center gap-2" id="btn-new-teacher">
+            <i class="bi bi-person-plus-fill"></i>
+            <span>Nuevo Profesor</span>
+        </button>
+    </div>
+</div>
+
+<!-- Contenedor Principal de la Tabla -->
+<div class="custom-card p-0 overflow-hidden">
+    <!-- Spinner de Carga -->
+    <div id="teachers-loading" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Cargando...</span>
+        </div>
+        <p class="text-muted mt-2 mb-0">Consultando docentes a la API...</p>
+    </div>
+
+    <!-- Alerta de Error -->
+    <div id="teachers-error" class="alert alert-danger m-3 d-none" role="alert">
+        <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-exclamation-octagon-fill fs-5"></i>
+            <div>
+                <strong>Error de conexión:</strong> No se pudieron cargar los profesores desde el endpoint de la API.
+            </div>
+        </div>
+    </div>
+
+    <!-- Estado Vacío -->
+    <div id="teachers-empty" class="text-center py-5 d-none">
+        <div class="mb-3 text-muted">
+            <i class="bi bi-person-x fs-1"></i>
+        </div>
+        <h5 class="fw-bold text-dark">No hay profesores registrados</h5>
+        <p class="text-muted mb-3">Comienza agregando un nuevo docente con el botón superior.</p>
+        <button class="btn btn-sm btn-outline-primary" id="btn-empty-new-teacher">
+            <i class="bi bi-plus-lg me-1"></i> Crear primer profesor
+        </button>
+    </div>
+
+    <!-- Tabla de Profesores -->
+    <div class="table-responsive">
+        <table class="table table-custom d-none" id="teachers-table">
+            <thead>
+                <tr>
+                    <th style="width: 80px;" class="text-center">ID</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th style="width: 180px;" class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="teachers-tbody">
+                <!-- Filas generadas dinámicamente con JavaScript fetch() -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal: Crear / Editar Profesor -->
+<div class="modal fade" id="teacherModal" tabindex="-1" aria-labelledby="teacherModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form id="teacher-form" novalidate>
+                <div class="modal-header bg-light">
+                    <h5 class="modal-title fw-bold" id="teacherModalLabel">
+                        <i class="bi bi-person-plus text-primary me-2"></i>Nuevo Profesor
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <!-- ID oculto para distinguir Creación vs Edición -->
+                    <input type="hidden" id="teacher-id" value="">
+
+                    <div class="mb-3">
+                        <label for="teacher-first-name" class="form-label fw-semibold">Nombre <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="teacher-first-name" placeholder="Ej: Marcelo" required maxlength="100">
+                        <div class="invalid-feedback">Por favor ingresa el nombre del profesor.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="teacher-last-name" class="form-label fw-semibold">Apellido <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="teacher-last-name" placeholder="Ej: Alvarado" required maxlength="100">
+                        <div class="invalid-feedback">Por favor ingresa el apellido del profesor.</div>
+                    </div>
+
+                    <div id="teacher-modal-error-alert" class="alert alert-danger py-2 d-none" role="alert">
+                        <small id="teacher-modal-error-message">Ocurrió un error al procesar la solicitud.</small>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-gradient-primary d-flex align-items-center gap-2" id="btn-save-teacher">
+                        <span class="spinner-border spinner-border-sm d-none" id="teacher-save-spinner" role="status" aria-hidden="true"></span>
+                        <span id="teacher-save-btn-text">Guardar Profesor</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Confirmar Eliminación -->
+<div class="modal fade" id="deleteTeacherConfirmModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h6 class="modal-title fw-bold">
+                    <i class="bi bi-trash3-fill me-1"></i> Confirmar Eliminación
+                </h6>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body text-center p-4">
+                <i class="bi bi-exclamation-triangle text-danger display-4 mb-3 d-block"></i>
+                <p class="mb-1 text-dark fw-semibold">¿Eliminar a este profesor?</p>
+                <p class="text-muted small mb-0" id="delete-teacher-name">Profesor</p>
+                <input type="hidden" id="delete-teacher-id">
+            </div>
+            <div class="modal-footer justify-content-center bg-light">
+                <button type="button" class="btn btn-sm btn-outline-secondary px-3" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-sm btn-danger px-3 d-flex align-items-center gap-1" id="btn-confirm-delete-teacher">
+                    <span class="spinner-border spinner-border-sm d-none" id="teacher-delete-spinner" role="status" aria-hidden="true"></span>
+                    <span id="teacher-delete-btn-text">Sí, eliminar</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/academic/js/teachers.js?v=5.0"></script>
+{% endblock %}

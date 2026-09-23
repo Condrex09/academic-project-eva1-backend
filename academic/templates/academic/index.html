@@ -1,18 +1,1 @@
-{% extends 'academic/base.html' %}
-
-{% block title %}Inicio · Gestión Académica{% endblock %}
-
-{% block content %}
-<div class="p-5 mb-4 bg-white rounded-3 shadow-sm">
-    <h1 class="display-6">Sistema de Gestión Académica</h1>
-    <p class="col-md-8 fs-5">
-        Plataforma desarrollada con Django y Django REST Framework.
-        La interfaz web "enmascara" los endpoints REST: navega por las
-        secciones mientras el navegador consulta la API en segundo plano.
-    </p>
-    <div class="d-flex gap-2">
-        <a href="{% url 'courses' %}" class="btn btn-primary">Ver cursos</a>
-        <a href="{% url 'students' %}" class="btn btn-outline-secondary">Ver estudiantes</a>
-    </div>
-</div>
-{% endblock %}
+{% extends 'academic/home.html' %}
